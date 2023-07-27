@@ -22,11 +22,17 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [TransactionController::class, 'index'])->name('home');
+
     Route::get('/deposit', [TransactionController::class, 'deposit'])->name('deposit');
+    Route::post('deposit-post', [TransactionController::class, 'depositPost'])->name('depositPost');
+
     Route::get('/withdraw', [TransactionController::class, 'withdraw'])->name('withdraw');
+    Route::post('withdraw-post', [TransactionController::class, 'withdrawPost'])->name('withdrawPost');
+
     Route::get('/transfer', [TransactionController::class, 'transfer'])->name('transfer');
+    Route::post('transfer-post', [TransactionController::class, 'transferPost'])->name('transferPost');
+
     Route::get('/statement', [TransactionController::class, 'statement'])->name('statement');
-    Route::patch('/profile', [TransactionController::class, 'update'])->name('profile.update');
 });
 
 require __DIR__.'/auth.php';
