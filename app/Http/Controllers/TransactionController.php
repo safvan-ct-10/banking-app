@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use DataTables;
 
 class TransactionController extends Controller
 {
@@ -32,10 +33,11 @@ class TransactionController extends Controller
         $balance = $user->balance + $amount;
 
         Transaction::create([
+            'user_id' => auth()->user()->id,
             'type' => 1,
             'amount' => $amount,
             'summary' => 'Deposit',
-            'balance' => $balance
+            'balance' => $balance,
         ]);
 
         $user->balance = $balance;
@@ -55,17 +57,18 @@ class TransactionController extends Controller
         $amount = floatval($request->amount);
         $user = User::find(auth()->user()->id);
 
-        if($amount > $user->balance) {
+        if ($amount > $user->balance) {
             return redirect()->back()->withInput($request->all())->with('error', 'Insufficient balance!');
         }
 
         $balance = $user->balance - $amount;
 
         Transaction::create([
+            'user_id' => auth()->user()->id,
             'type' => 2,
             'amount' => $amount,
             'summary' => 'Withdraw',
-            'balance' => $balance
+            'balance' => $balance,
         ]);
 
         $user->balance = $balance;
@@ -86,11 +89,11 @@ class TransactionController extends Controller
         $fromUser = User::find(auth()->user()->id);
 
         $toUser = User::where('email', $request->email)->first();
-        if(is_null($toUser) || ($toUser->id == $fromUser->id)) {
+        if (is_null($toUser) || ($toUser->id == $fromUser->id)) {
             return redirect()->back()->withInput($request->all())->with('error', 'Email id not registered!');
         }
 
-        if($amount > $fromUser->balance) {
+        if ($amount > $fromUser->balance) {
             return redirect()->back()->withInput($request->all())->with('error', 'Insufficient balance!');
         }
 
@@ -98,10 +101,12 @@ class TransactionController extends Controller
         $balance = $fromUser->balance - $amount;
 
         Transaction::create([
+            'user_id' => auth()->user()->id,
+            'to_user_id' => $toUser->id,
             'type' => 2,
             'amount' => $amount,
             'summary' => "Transfer to {$toUser->email}",
-            'balance' => $balance
+            'balance' => $balance,
         ]);
 
         $fromUser->balance = $balance;
@@ -111,10 +116,12 @@ class TransactionController extends Controller
         $balance = $toUser->balance + $amount;
 
         Transaction::create([
+            'user_id' => $toUser->id,
+            'from_user_id' => $fromUser->id,
             'type' => 1,
             'amount' => $amount,
             'summary' => "Transfer from {$fromUser->email}",
-            'balance' => $balance
+            'balance' => $balance,
         ]);
 
         $toUser->balance = $balance;
@@ -123,9 +130,28 @@ class TransactionController extends Controller
         return Redirect::route('transfer')->with('success', "{$amount} transfer successfully!");
     }
 
+    // Statement Function
     public function statement(): View
     {
         $active = 'statement';
         return view('statement')->with('active', $active);
     }
+    public function result()
+    {
+        $data = Transaction::where('user_id', auth()->user()->id)->latest()->get();
+
+        return Datatables::of($data)
+            ->addIndexColumn()
+            ->addColumn('time', function ($row) {
+                return date('d-m-Y h:i A', strtotime($row->created_at));
+            })
+            ->addColumn('type', function ($row) {
+                return $row->type == 1 ? 'Credit' : 'Debit';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+        return view('users');
+    }
+
 }

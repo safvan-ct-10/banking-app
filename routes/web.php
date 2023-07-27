@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('transfer-post', [TransactionController::class, 'transferPost'])->name('transferPost');
 
     Route::get('/statement', [TransactionController::class, 'statement'])->name('statement');
+    Route::get('statement-result', [TransactionController::class, 'result'])->name('statement.result');
 });
 
 require __DIR__.'/auth.php';

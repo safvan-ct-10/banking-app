@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
+            $table->bigInteger('from_user_id')->nullable();
+            $table->bigInteger('to_user_id')->nullable();
             $table->tinyInteger('type')->default(1)->comment('1 - Credit, 2 - Debit');
             $table->decimal('amount', 10, 2)->default(0);
             $table->string('summary')->nullable();

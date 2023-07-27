@@ -35,6 +35,10 @@
 <body class=" layout-fluid">
     <script src="{{ asset('/assets/js/demo-theme.min.js') }}"></script>
 
+    <!-- Add these lines in your head or footer section -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+
     <div class="page">
         @include('layouts.navigation')
 
