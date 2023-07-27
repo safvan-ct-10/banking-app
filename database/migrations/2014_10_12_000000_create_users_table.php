@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->tinyInteger('terms_and_policy')->default(0)->comment('0 - No, 1 - Yes');
+            $table->decimal('balance', 10, 2)->default(0);
             $table->timestamps();
         });
     }

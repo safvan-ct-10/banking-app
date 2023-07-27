@@ -39,7 +39,10 @@
         @include('layouts.navigation')
 
         <!-- Page Content -->
-        <main>{{ $slot }}</main>
+        @yield('content')
+
+        <script src="{{ asset('/assets/js/tabler.min.js') }}" defer></script>
+        <script src="{{ asset('/assets/js/demo.min.js') }}" defer></script>
     </div>
 </body>
 

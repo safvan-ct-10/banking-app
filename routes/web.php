@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -19,14 +19,14 @@ Route::get('/', function () {
     return Redirect::route('login');
 });
 
-Route::get('/home', function () {
-    return view('home');
-})->middleware(['auth', 'verified'])->name('home');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/home', [TransactionController::class, 'index'])->name('home');
+    Route::get('/deposit', [TransactionController::class, 'deposit'])->name('deposit');
+    Route::get('/withdraw', [TransactionController::class, 'withdraw'])->name('withdraw');
+    Route::get('/transfer', [TransactionController::class, 'transfer'])->name('transfer');
+    Route::get('/statement', [TransactionController::class, 'statement'])->name('statement');
+    Route::patch('/profile', [TransactionController::class, 'update'])->name('profile.update');
 });
 
 require __DIR__.'/auth.php';

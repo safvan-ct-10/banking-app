@@ -9,16 +9,36 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
-class ProfileController extends Controller
+class TransactionController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
-    public function edit(Request $request): View
+    public function index(): View
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $active = 'home';
+        return view('home')->with('active', $active);
+    }
+
+    public function deposit(): View
+    {
+        $active = 'deposit';
+        return view('deposit')->with('active', $active);
+    }
+
+    public function withdraw(): View
+    {
+        $active = 'withdraw';
+        return view('withdraw')->with('active', $active);
+    }
+
+    public function transfer(): View
+    {
+        $active = 'transfer';
+        return view('transfer')->with('active', $active);
+    }
+
+    public function statement(): View
+    {
+        $active = 'statement';
+        return view('statement')->with('active', $active);
     }
 
     /**
@@ -35,26 +55,5 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
-    }
-
-    /**
-     * Delete the user's account.
-     */
-    public function destroy(Request $request): RedirectResponse
-    {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current_password'],
-        ]);
-
-        $user = $request->user();
-
-        Auth::logout();
-
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
     }
 }
