@@ -24,16 +24,6 @@
                                             <th>BALANCE</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>{{ date('Y-m-d H:i:s A') }}</td>
-                                            <td>2000.00</td>
-                                            <td>Credit</td>
-                                            <td>Deposit</td>
-                                            <td>2000.00</td>
-                                        </tr>
-                                    </tbody>
                                 </table>
                             </div>
 
@@ -140,44 +130,6 @@
                     $('#custom-pagination').html(paginationHtml);
                 }
             });
-
-
-            var currentPage = 1;
-            var rowsPerPage = 5; // Set the number of rows per page to 5
-            var totalRows = dataTable.rows().count();
-
-            // function paginate() {
-            //     var startIndex = (currentPage - 1) * rowsPerPage;
-            //     var endIndex = startIndex + rowsPerPage;
-
-            //     // Hide all rows
-            //     dataTable.rows().nodes().to$().hide();
-
-            //     // Show the rows for the current page
-            //     dataTable.rows().slice(startIndex, endIndex).nodes().to$().show();
-
-            //     // Update custom pagination display
-            //     var paginationHtml = `Page ${currentPage} of ${Math.ceil(totalRows / rowsPerPage)}`;
-            //     $('#custom-pagination').html(paginationHtml);
-            // }
-
-            // // Trigger custom pagination when the table is initially loaded
-            // paginate();
-
-            // // Add event handlers for custom pagination controls
-            // $('#custom-pagination').on('click', '.prev-page', function() {
-            //     if (currentPage > 1) {
-            //         currentPage--;
-            //         paginate();
-            //     }
-            // });
-
-            // $('#custom-pagination').on('click', '.next-page', function() {
-            //     if (currentPage < Math.ceil(totalRows / rowsPerPage)) {
-            //         currentPage++;
-            //         paginate();
-            //     }
-            // })
         });
     </script>
 @endsection

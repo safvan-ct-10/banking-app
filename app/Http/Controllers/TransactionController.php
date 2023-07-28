@@ -138,7 +138,7 @@ class TransactionController extends Controller
     }
     public function result()
     {
-        $data = Transaction::where('user_id', auth()->user()->id)->latest()->get();
+        $data = Transaction::where('user_id', auth()->user()->id)->get();
 
         return Datatables::of($data)
             ->addIndexColumn()
