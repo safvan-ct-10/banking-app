@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\TransactionController;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,13 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return Redirect::route('login');
-});
-
-
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/home', [TransactionController::class, 'index'])->name('home');
+    Route::get('/', [TransactionController::class, 'index'])->name('home');
 
     Route::get('/deposit', [TransactionController::class, 'deposit'])->name('deposit');
     Route::post('deposit-post', [TransactionController::class, 'depositPost'])->name('depositPost');
